@@ -1,8 +1,9 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import 'react-native-gesture-handler';
+import { TouchableOpacity } from 'react-native';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -43,7 +44,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-
+  const router = useRouter();
   return (
     <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -54,11 +55,34 @@ function RootLayoutNav() {
             headerTitleStyle: {
               fontFamily: 'mon-sb',
             },
+            headerTitleAlign: 'center',
             animation:"slide_from_bottom",
+            presentation: 'modal',
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <Ionicons name="close-outline" size={28} />
+              </TouchableOpacity>
+            )
+          }} 
+        />
+        <Stack.Screen 
+          name="listing/[id]" 
+          options={{ 
             presentation: 'modal' 
           }} 
         />
-        {/* <Stack.Screen name="modal" options={{ presentation: 'modal' }} /> */}
+        <Stack.Screen 
+          name="(modals)/booking" 
+          options={{ 
+            presentation: 'transparentModal',
+            animation: 'fade',
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => router.back()}>
+                <Ionicons name="close-outline" size={28} />
+              </TouchableOpacity>
+            )
+          }} 
+        />
       </Stack>
     );
   }
