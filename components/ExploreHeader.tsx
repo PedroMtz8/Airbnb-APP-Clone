@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
 import React from 'react'
+import { defaultStyles } from '@/constants/styles';
 
 const categories = [
   {
@@ -38,7 +39,7 @@ interface Props {
 
 export default function ExploreHeader() {
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 50 }} >
+    <SafeAreaView style={[ defaultStyles.safeArea, { flex: 1 } ]} >
       <View>
         <View style={exploreStyles.container}>
 
