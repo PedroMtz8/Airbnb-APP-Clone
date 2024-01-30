@@ -6,8 +6,8 @@ import { Link } from 'expo-router';
 
 export default function Profile() {
 
-  const { signOut, isSignedIn } = useAuth();
-
+  const { signOut, isSignedIn, userId } = useAuth();
+  console.log('user id', userId)
   return (
     <View>
       <Text>Profile</Text>
