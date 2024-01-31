@@ -1,46 +1,32 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView } from 'react-native'
+import React, { useRef, useState } from 'react'
 import { defaultStyles } from '@/constants/styles';
 import { Link } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
-
-const categories = [
-  {
-    name: 'Tiny homes',
-    icon: 'home',
-  },
-  {
-    name: 'Cabins',
-    icon: 'house-siding',
-  },
-  {
-    name: 'Trending',
-    icon: 'local-fire-department',
-  },
-  {
-    name: 'Play',
-    icon: 'videogame-asset',
-  },
-  {
-    name: 'City',
-    icon: 'apartment',
-  },
-  {
-    name: 'Beachfront',
-    icon: 'beach-access',
-  },
-  {
-    name: 'Countryside',
-    icon: 'nature-people',
-  },
-];
+import categories from '@/mockData/categories.json';
+import * as Haptics from 'expo-haptics';
 
 interface Props {
   onCategoryChanged: (category: string) => void;
 }
 
 export default function ExploreHeader() {
+  const scrollRef = useRef<ScrollView>(null);
+  const itemsRef = useRef<Array<TouchableOpacity | null>>([]);
+  const [activeCategory, setActiveCategory] = useState(0);
+
+  const onSelectedCategory = (index: number) => {
+    const selected = itemsRef.current[index];
+    setActiveCategory(index);
+    selected?.measure((x, y, width, height, pageX, pageY) => {
+      scrollRef.current?.scrollTo({ x: x - 16, y: 0, animated: true })
+      console.log(x, y, width, height, pageX, pageY)
+    })
+    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+
+  }
+
   return (
     <SafeAreaView style={[ defaultStyles.safeArea, { backgroundColor: '#fff' } ]} >
         <View style={exploreStyles.container}>
@@ -60,7 +46,37 @@ export default function ExploreHeader() {
           </View>
 
           {/* here i will continue */}
-
+          <ScrollView 
+            ref={scrollRef}
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{
+              alignItems: 'center',
+              gap: 20,
+              paddingHorizontal: 16,
+            }}
+          >
+            {
+              categories.map((category, index) => (
+                <TouchableOpacity 
+                  key={index} 
+                  ref={ref => itemsRef.current[index] = ref}
+                  onPress={ () => onSelectedCategory(index) }
+                  style={ activeCategory === index ? exploreStyles.categoriesBtnActive : exploreStyles.categoriesBtn}
+                >
+                  {/* <Ionicons name={category.icon} size={24} /> */}
+                  <MaterialIcons 
+                    name={category.icon as any}
+                    size={25} 
+                    color={ activeCategory === index ? '#000' : Colors.grey }
+                  />
+                    <Text style={activeCategory === index ? exploreStyles.categoryTextActive : exploreStyles.categoryText}>
+                      {category.name}
+                    </Text>
+                </TouchableOpacity>
+              ))
+            }
+          </ScrollView>
 
         </View>
     </SafeAreaView>
@@ -70,7 +86,7 @@ export default function ExploreHeader() {
 const exploreStyles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    height: 130,
+    height: 150,
   },
   actionRow: {
     flexDirection: 'row',
@@ -105,5 +121,29 @@ const exploreStyles = StyleSheet.create({
       width: 1,
       height: 1,
     },
-  }
+  },
+  categoryText: {
+    fontSize: 14,
+    fontFamily: 'mon-sb',
+    color: Colors.grey,
+  },
+  categoryTextActive: {
+    fontSize: 14,
+    fontFamily: 'mon-sb',
+    color: '#000',
+  },
+  categoriesBtn: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 8,
+  },
+  categoriesBtnActive: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderBottomColor: '#000',
+    borderBottomWidth: 2,
+    paddingBottom: 8,
+  },
 })
