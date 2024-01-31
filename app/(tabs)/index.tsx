@@ -9,7 +9,7 @@ export default function Index(){
     <View>
       <Stack.Screen 
         options={{
-          header: () => <ExploreHeader/>
+          header: () => <ExploreHeader />
         }}
       />
       <Listings />
