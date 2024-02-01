@@ -11,7 +11,7 @@ interface Props {
   onCategoryChanged: (category: string) => void;
 }
 
-export default function ExploreHeader() {
+export default function ExploreHeader({ onCategoryChanged }: Props) {
   const scrollRef = useRef<ScrollView>(null);
   const itemsRef = useRef<Array<TouchableOpacity | null>>([]);
   const [activeCategory, setActiveCategory] = useState(0);
@@ -21,10 +21,10 @@ export default function ExploreHeader() {
     setActiveCategory(index);
     selected?.measure((x, y, width, height, pageX, pageY) => {
       scrollRef.current?.scrollTo({ x: x - 16, y: 0, animated: true })
-      console.log(x, y, width, height, pageX, pageY)
+      // console.log(x, y, width, height, pageX, pageY)
     })
-    // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+    onCategoryChanged(categories[index].name)
   }
 
   return (

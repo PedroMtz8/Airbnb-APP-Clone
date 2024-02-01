@@ -1,7 +1,17 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 
-export default function Listings() {
+interface Props {
+  listings: Array<any>;
+  category: string;
+}
+
+export default function Listings({ listings, category }: Props) {
+
+  useEffect(() => {
+    console.log('LISTINGS: ', category);
+  }, [category])
+
   return (
     <View>
       <Text>Listings</Text>
