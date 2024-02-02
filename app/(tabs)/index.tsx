@@ -4,12 +4,13 @@ import { Stack } from 'expo-router';
 import ExploreHeader from '@/components/ExploreHeader';
 import Listings from '@/components/Listings';
 import ListingsData from '@/assets/data/airbnb-listings.json';
+import { Listing } from '@/interfaces/listing';
 
 export default function Index(){
   const [category, setCategory] = React.useState('')
-
   const items = useMemo(() => {
-    return ListingsData as any
+    console.log('items, ', (ListingsData as Listing[]).length)
+    return ListingsData as Listing[]
   }, [category])
 
   const onDataChanged = (category: string) => {
@@ -17,7 +18,7 @@ export default function Index(){
   }
 
   return (
-    <View style={{ flex: 1, marginTop: 130 }} >
+    <View style={{ flex: 1, paddingTop: 30, backgroundColor: '#fff' }} >
       <Stack.Screen 
         options={{
           header: () => <ExploreHeader onCategoryChanged={onDataChanged} />
