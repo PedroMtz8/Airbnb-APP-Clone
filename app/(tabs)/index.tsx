@@ -9,8 +9,11 @@ import { Listing } from '@/interfaces/listing';
 export default function Index(){
   const [category, setCategory] = React.useState('')
   const items = useMemo(() => {
-    console.log('items, ', (ListingsData as Listing[]).length)
-    return ListingsData as Listing[]
+    const filter = (ListingsData as Listing[]).filter((item) => {
+      return item.medium_url !== null
+    })
+    console.log('filtered:  ', filter.length)
+    return filter
   }, [category])
 
   const onDataChanged = (category: string) => {
