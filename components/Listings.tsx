@@ -4,6 +4,7 @@ import { defaultStyles } from '@/constants/styles';
 import { Link } from 'expo-router';
 import { Listing } from '@/interfaces/listing';
 import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 
 interface Props {
   listings: Listing[];
@@ -27,7 +28,7 @@ export default function Listings({ listings, category }: Props) {
     return (
       <Link href={`/listing/${item.id}`} asChild>
         <TouchableOpacity style={{ width: '100%' }} >
-          <View style={stls.listing}>
+          <Animated.View style={stls.listing} entering={FadeInRight} exiting={FadeOutLeft} >
             <Image source={{ uri: item.medium_url as string  }} style={stls.image} />
             <TouchableOpacity style={{ position: 'absolute', right: 30, top: 30 }}>
               <Ionicons name='heart-outline' size={24} color={"#000"} />
@@ -48,7 +49,7 @@ export default function Listings({ listings, category }: Props) {
               <Text style={{ fontFamily: 'mon' }}>night</Text>
             </View>
 
-          </View>
+          </Animated.View>
         </TouchableOpacity>
       </Link>
     )

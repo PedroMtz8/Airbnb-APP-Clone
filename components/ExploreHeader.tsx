@@ -20,7 +20,7 @@ export default function ExploreHeader({ onCategoryChanged }: Props) {
     const selected = itemsRef.current[index];
     setActiveCategory(index);
     selected?.measure((x, y, width, height, pageX, pageY) => {
-      scrollRef.current?.scrollTo({ x: x - 16, y: 0, animated: true })
+      scrollRef.current?.scrollTo({ x: pageX - 16, y: 0, animated: true })
       // console.log(x, y, width, height, pageX, pageY)
     })
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
