@@ -8,7 +8,6 @@ import {
   Dimensions, 
   TouchableOpacity, 
   Share, 
-  RefreshControl 
 } from 'react-native';
 import listingsData from '@/assets/data/airbnb-listings.json';
 import { Ionicons } from '@expo/vector-icons';
@@ -76,7 +75,7 @@ const DetailsPage = () => {
         {
           translateY: interpolate(
             scrollOffset.value,
-            [-IMG_HEIGHT, 0, IMG_HEIGHT, IMG_HEIGHT],
+            [-IMG_HEIGHT, 0, IMG_HEIGHT],
             [-IMG_HEIGHT / 2, 0, IMG_HEIGHT * 0.75]
           ),
         },
@@ -89,7 +88,7 @@ const DetailsPage = () => {
 
   const headerAnimatedStyle = useAnimatedStyle(() => {
     return {
-      opacity: interpolate(scrollOffset.value, [0, IMG_HEIGHT / 1.5], [0, 1]),
+      opacity: interpolate(scrollOffset.value, [0, IMG_HEIGHT/1.3], [0, 1]),
     };
   }, []);
 

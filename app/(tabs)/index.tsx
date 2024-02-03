@@ -3,16 +3,17 @@ import React, { useMemo } from 'react';
 import { Stack } from 'expo-router';
 import ExploreHeader from '@/components/ExploreHeader';
 import Listings from '@/components/Listings';
-import ListingsData from '@/assets/data/airbnb-listings.json';
+import listingsData from '@/assets/data/airbnb-listings.json';
+import listingsDataGeo from '@/assets/data/airbnb-listings.geo.json';
 import { Listing } from '@/interfaces/listing';
+import ListingsMap from '@/components/ListingsMap';
 
 export default function Index(){
   const [category, setCategory] = React.useState('')
   const items = useMemo(() => {
-    const filter = (ListingsData as Listing[]).filter((item) => {
+    const filter = (listingsData as Listing[]).filter((item) => {
       return item.medium_url !== null
     })
-    console.log('filtered:  ', filter.length)
     return filter
   }, [category])
 
@@ -27,7 +28,8 @@ export default function Index(){
           header: () => <ExploreHeader onCategoryChanged={onDataChanged} />
         }}
       />
-      <Listings category={category} listings={items} />
+      <ListingsMap listings={listingsDataGeo} />
+      {/* <Listings category={category} listings={items} /> */}
     </View>
   )
 }
