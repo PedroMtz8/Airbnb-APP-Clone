@@ -1,10 +1,19 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView, RefreshControl } from 'react-native'
 import React from 'react'
 
 export default function Trips() {
   return (
-    <View>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          refreshing={false}
+          onRefresh={() => {
+            console.log('refreshing');
+          }}
+        />
+      }
+    >
       <Text>Trips</Text>
-    </View>
+    </ScrollView>
   )
 }
