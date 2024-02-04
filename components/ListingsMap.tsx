@@ -1,9 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
+import { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { defaultStyles } from '@/constants/styles'
 import { ListingGeo } from '@/interfaces/listingGeo'
 import { useRouter } from 'expo-router'
+import MapView from 'react-native-map-clustering'
 
 interface Props {
   listings: {
@@ -27,14 +28,49 @@ export default function ListingsMap({ listings }: Props) {
     router.push(`/listing/${list.properties.id}`)
   }
 
+  const renderCluster = (cluster: any) => {
+
+    const { id, geometry, properties, onPress } = cluster
+
+    const points = properties.point_count;
+
+    return (
+      <Marker 
+        key={'cluster' + id}
+        coordinate={{
+          latitude: geometry.coordinates[1],
+          longitude: geometry.coordinates[0],
+        }}
+        onPress={onPress}
+      >
+        <View style={styles.marker} >
+          <Text 
+            style={{
+              color: 'black',
+              textAlign: 'center',
+              fontFamily: 'mon-sb',
+            }} 
+          >
+            {points}
+          </Text>
+        </View>
+      </Marker>
+    )
+  }
+
   return (
     <View style={defaultStyles.container} >
       <MapView 
+        animationEnabled={false}
         style={StyleSheet.absoluteFill} 
         showsUserLocation
         showsMyLocationButton
         provider={PROVIDER_GOOGLE}
         initialRegion={INITIAL_REGION}
+        clusterColor='#fff'
+        clusterTextColor='#000'
+        clusterFontFamily='mon-sb'
+        renderCluster={renderCluster}
       >
         {
           listings.features.map((listing) => (
