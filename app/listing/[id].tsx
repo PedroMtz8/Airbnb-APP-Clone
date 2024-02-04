@@ -7,7 +7,8 @@ import {
   Image, 
   Dimensions, 
   TouchableOpacity, 
-  Share, 
+  Share,
+  RefreshControl, 
 } from 'react-native';
 import listingsData from '@/assets/data/airbnb-listings.json';
 import { Ionicons } from '@expo/vector-icons';
@@ -98,14 +99,14 @@ const DetailsPage = () => {
           contentContainerStyle={{ paddingBottom: 100 }}
           ref={scrollRef}
           scrollEventThrottle={16}
-          // refreshControl={
-          //   <RefreshControl
-          //     refreshing={false}
-          //     onRefresh={() => {
-          //       console.log('refreshing');
-          //     }}
-          //   />
-          // }
+          refreshControl={
+            <RefreshControl
+              refreshing={false}
+              onRefresh={() => {
+                console.log('refreshing');
+              }}
+            />
+          }
         >
           <Animated.Image
             source={{ uri: listing.xl_picture_url }}
