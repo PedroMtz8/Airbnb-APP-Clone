@@ -8,6 +8,13 @@ export default function RootLayout() {
   return (
     <Tabs screenOptions={{
       tabBarActiveTintColor: Colors.primary,
+      tabBarStyle: {
+        borderTopColor: 'rgba(0, 0, 0, 0.1)',
+        height: 60,
+        paddingTop: 10,
+        paddingBottom: 10,
+        borderTopWidth: 1,
+      },
       tabBarLabelStyle: {
         fontFamily: 'mon-sb'
       }
