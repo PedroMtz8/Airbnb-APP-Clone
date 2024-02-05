@@ -7,13 +7,22 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInRight, FadeOutLeft } from 'react-native-reanimated';
 
 interface Props {
-  listings: Listing[];
+  listings: any[];
   category: string;
+  refresh: number;
 }
 
-export default function Listings({ listings, category }: Props) {
+export default function Listings({ listings, category, refresh }: Props) {
   const [loading, setLoading] = useState(false);
   const listRef = useRef<FlatList>(null)
+
+
+  useEffect(() => {
+    console.log('refresh listings')
+    if(refresh){
+      listRef.current?.scrollToOffset({ offset: 0, animated: true })
+    }
+  }, [refresh])
 
   useEffect(() => {
     setLoading(true);
@@ -54,16 +63,12 @@ export default function Listings({ listings, category }: Props) {
       </Link>
     )
   };
-
   return (
-    <View style={defaultStyles.container}>
       <FlatList
         ref={listRef}
         data={loading ? [] : listings}
         renderItem={renderRow}
       />
-      {/* <Text>Listings</Text> */}
-    </View>
   )
 }
 

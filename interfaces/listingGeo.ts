@@ -1,4 +1,9 @@
-export interface ListingGeo {
+export interface ListingGeoV2 {
+  type: string;
+  features: FeatureGeo[];
+}
+
+export interface FeatureGeo {
   type: string;
   geometry: Geometry;
   properties: Properties;

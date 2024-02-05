@@ -9,6 +9,7 @@ import { Listing } from '@/interfaces/listing';
 import ListingsMap from '@/components/ListingsMap';
 import ListingsBottomSheet from '@/components/ListingsBottomSheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ListingGeoV2 } from '@/interfaces/listingGeo';
 
 export default function Index(){
   const [category, setCategory] = React.useState('')
@@ -31,8 +32,7 @@ export default function Index(){
         }}
       />
 
-      {/* <Listings category={category} listings={items} /> */}
-      <ListingsMap listings={listingsDataGeo} />
+      <ListingsMap listings={listingsDataGeo as ListingGeoV2} />
 
       <ListingsBottomSheet listings={items} category={category} />
     </GestureHandlerRootView>
