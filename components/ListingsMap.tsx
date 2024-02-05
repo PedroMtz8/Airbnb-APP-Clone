@@ -2,14 +2,12 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { defaultStyles } from '@/constants/styles'
-import { ListingGeo } from '@/interfaces/listingGeo'
+import { FeatureGeo, ListingGeoV2 } from '@/interfaces/listingGeo'
 import { useRouter } from 'expo-router'
 import MapView from 'react-native-map-clustering'
 
 interface Props {
-  listings: {
-    features: ListingGeo[]
-  }
+  listings: ListingGeoV2
 }
 
 const INITIAL_REGION = {
@@ -23,7 +21,7 @@ export default function ListingsMap({ listings }: Props) {
 
   const router = useRouter();
 
-  const onMarkSelected = (list: ListingGeo) => {
+  const onMarkSelected = (list: FeatureGeo) => {
     console.log(list)
     router.push(`/listing/${list.properties.id}`)
   }
