@@ -52,6 +52,7 @@ export default function RootLayout() {
         name="profile" 
         options={{
           tabBarLabel: 'Profile',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => <Ionicons name="person-circle-outline" color={color} size={size} />,
         }} 
       />

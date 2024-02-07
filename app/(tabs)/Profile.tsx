@@ -1,17 +1,46 @@
-import { View, Text, Button } from 'react-native'
-import React from 'react'
-import { useAuth } from '@clerk/clerk-expo'
+import { View, Text, Button, StyleSheet, SafeAreaView } from 'react-native'
+import React, { useEffect } from 'react'
+import { useAuth, useUser } from '@clerk/clerk-expo'
 import { SignIn } from '@clerk/clerk-react';
 import { Link } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { defaultStyles } from '@/constants/styles';
+import Colors from '@/constants/Colors';
 
 export default function Profile() {
 
   const { signOut, isSignedIn, userId } = useAuth();
-  console.log('user id', userId)
+  const { user } = useUser();
+
+  const [firstName, setFirstName] = React.useState(user?.firstName);
+  const [lastName, setLastName] = React.useState(user?.lastName);
+  const [email, setEmail] = React.useState(user?.emailAddresses[0].emailAddress);
+  const [edit, setEdit] = React.useState(false);
+
+  useEffect(() => {
+    if(!user) return;
+    setFirstName(user.firstName);
+    setLastName(user.lastName);
+    setEmail(user.emailAddresses[0].emailAddress);
+
+  }, [user])
+
+  const onSaveUser = async () => {
+    
+    setEdit(false);
+  }
+
+  const onCaptureImage = async () => {
+
+  }
+
   return (
-    <View>
-      <Text>Profile</Text>
-      <Button title="Log out" onPress={() => signOut()} />
+    <SafeAreaView style={defaultStyles.safeArea} >
+      <View style={pstyle.headerContainer} >
+        <Text style={pstyle.header}>Profile</Text>
+        <Ionicons name='notifications-outline' size={26} />
+      </View>
+      {isSignedIn && <Button title="Log out" onPress={() => signOut()} color={Colors.dark} />}
       {
         !isSignedIn && (
           <Link href="/(modals)/login" >
@@ -21,6 +50,19 @@ export default function Profile() {
           </Link>
         )
       }
-    </View>
+    </SafeAreaView>
   )
 }
+
+const pstyle = StyleSheet.create({
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 24,
+  },
+  header: {
+    fontFamily: 'mon-b',
+    fontSize: 24,
+  }
+})
