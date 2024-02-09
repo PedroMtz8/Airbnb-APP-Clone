@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native'
+import { View, Text, Button, StyleSheet, SafeAreaView, TouchableOpacity, Image, TextInput } from 'react-native'
 import React, { useEffect } from 'react'
 import { useAuth, useUser } from '@clerk/clerk-expo'
 import { SignIn } from '@clerk/clerk-react';
@@ -50,7 +50,23 @@ export default function Profile() {
             {
               edit ? 
               (
-                <Text>Edit</Text>
+              <View style={pstyle.editRow} >
+                <TextInput 
+                  placeholder='First Name' 
+                  value={firstName || ''}
+                  onChange={e => setFirstName(e.nativeEvent.text)}
+                  style={[defaultStyles.inputField, { width: 100 }]}
+                />
+                <TextInput 
+                  placeholder='Last Name' 
+                  value={lastName || ''}
+                  onChange={e => setLastName(e.nativeEvent.text)}
+                  style={[defaultStyles.inputField, { width: 100 }]}
+                />
+                <TouchableOpacity onPress={onSaveUser} >
+                  <Ionicons name='checkmark-outline' size={24} color={Colors.dark} />
+                </TouchableOpacity>
+              </View>
               ) : 
               (
               <View style={pstyle.editRow} >
@@ -64,6 +80,8 @@ export default function Profile() {
               ) 
             }
           </View>
+          <Text>{email}</Text>
+          <Text>Since {user?.createdAt?.toLocaleDateString()}</Text>
         </View>
       )}
 
@@ -114,6 +132,7 @@ const pstyle = StyleSheet.create({
     backgroundColor: Colors.grey,
   },
   editRow: {
+    height: 50,
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
