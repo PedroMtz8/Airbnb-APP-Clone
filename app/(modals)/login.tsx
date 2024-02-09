@@ -34,8 +34,9 @@ export default function Login() {
 
       if (createdSessionId) {
         setActive!({ session: createdSessionId });
-        router.back();
+        return router.back();
       }
+      return router.back();
     } catch (err) {
       console.error('OAuth error', err);
     }

@@ -71,10 +71,11 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const router = useRouter();
   const { isLoaded, isSignedIn } = useAuth();
-
   useEffect(() => {
     if(isLoaded && !isSignedIn) {
       router.push('/(modals)/login')
+    } else {
+      return router.back();
     }
   }, [isLoaded])
 
