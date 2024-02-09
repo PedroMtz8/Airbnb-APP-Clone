@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, SafeAreaView } from 'react-native'
+import { View, Text, Button, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native'
 import React, { useEffect } from 'react'
 import { useAuth, useUser } from '@clerk/clerk-expo'
 import { SignIn } from '@clerk/clerk-react';
@@ -40,6 +40,33 @@ export default function Profile() {
         <Text style={pstyle.header}>Profile</Text>
         <Ionicons name='notifications-outline' size={26} />
       </View>
+
+      {user &&  (
+        <View style={pstyle.card}>
+          <TouchableOpacity onPress={onCaptureImage} >
+            <Image source={{ uri: user?.imageUrl }} style={pstyle.avatar} />
+          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', gap: 6 }} >
+            {
+              edit ? 
+              (
+                <Text>Edit</Text>
+              ) : 
+              (
+              <View style={pstyle.editRow} >
+                <Text style={{ fontFamily: 'mon-b', fontSize: 22 }}>
+                  {firstName} {lastName}
+                </Text>
+                <TouchableOpacity onPress={() => setEdit(true)} >
+                  <Ionicons name='create-outline' size={24} color={Colors.dark} />
+                </TouchableOpacity>
+              </View>
+              ) 
+            }
+          </View>
+        </View>
+      )}
+
       {isSignedIn && <Button title="Log out" onPress={() => signOut()} color={Colors.dark} />}
       {
         !isSignedIn && (
@@ -64,5 +91,33 @@ const pstyle = StyleSheet.create({
   header: {
     fontFamily: 'mon-b',
     fontSize: 24,
+  },
+  card: {
+    backgroundColor: '#fff',
+    padding: 24,
+    marginHorizontal: 24,
+    marginTop: 24,
+    borderRadius: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    alignItems: 'center',
+    gap: 14,
+    marginBottom: 24,
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: Colors.grey,
+  },
+  editRow: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 8,
   }
 })
