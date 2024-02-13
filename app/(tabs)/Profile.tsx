@@ -6,6 +6,7 @@ import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { defaultStyles } from '@/constants/styles';
 import Colors from '@/constants/Colors';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function Profile() {
 
@@ -26,11 +27,35 @@ export default function Profile() {
   }, [user])
 
   const onSaveUser = async () => {
-    
-    setEdit(false);
+    try {
+      if(!firstName || !lastName) return;
+      await user?.update({ firstName, lastName });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setEdit(false);
+    }
   }
 
   const onCaptureImage = async () => {
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.75,
+      base64: true,
+    });
+
+    if (!result.canceled) {
+      try {
+        const base64 = `data:image/png;base64,${result.assets[0].base64}`;
+        user?.setProfileImage({
+          file: base64,
+        })
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
   }
 
