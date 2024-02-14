@@ -18,7 +18,6 @@ export default function Listings({ listings, category, refresh }: Props) {
 
 
   useEffect(() => {
-    console.log('refresh listings')
     if(refresh){
       listRef.current?.scrollToOffset({ offset: 0, animated: true })
     }
