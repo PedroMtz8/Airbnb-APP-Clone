@@ -1,11 +1,12 @@
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
+import { Text, StyleSheet, View, TouchableOpacity, TextInput, ScrollView, Image } from 'react-native'
 import React from 'react'
 import { BlurView } from 'expo-blur';
 import { defaultStyles } from '@/constants/styles';
-import Animated, { SlideInDown } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeOut, SlideInDown } from 'react-native-reanimated';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
+import { places } from '@/assets/data/places';
 
 const guestsGropus = [
   {
@@ -45,40 +46,89 @@ export default function Booking() {
 
   return (
     <BlurView intensity={100} tint='light' style={[ defaultStyles.safeArea, bstyles.container]} >
-      <Text>Booking</Text>
-
       {/* WHERE */}
       <View style={bstyles.card} >
         {openCard !== 0 && (
-          <AnimatedTouchableOpacity onPress={() => setOpenCard(0)} >
+          <AnimatedTouchableOpacity 
+            onPress={() => setOpenCard(0)} 
+            style={bstyles.cardPreview}
+            entering={FadeIn.duration(200)} exiting={FadeOut.duration(200)}
+          >
             <Text style={[bstyles.previewText]} >Where</Text>
             <Text style={[bstyles.previewdData]} >I'm flexible</Text>
 
           </AnimatedTouchableOpacity>
+        )}
+        {openCard === 0 && (
+          <>
+            <Animated.Text style={bstyles.cardHeader} >Where to?</Animated.Text>
+            <Animated.View style={bstyles.cardBody}>
+              <View style={bstyles.searchSection} >
+                <Ionicons style={bstyles.searchIcon} name='search' size={20} />
+                <TextInput style={bstyles.inputField} placeholder='Search destination' placeholderTextColor={Colors.grey}  />
+              </View>
+              
+            </Animated.View>
+            <ScrollView 
+                horizontal 
+                showsHorizontalScrollIndicator={false} 
+                contentContainerStyle={{ gap: 25, paddingLeft: 20, marginBottom: 30 }}
+              >
+                {places.map((place, index) => (
+                  <TouchableOpacity key={index} onPress={() => setSelectedPlace(index) } >
+                    <Image 
+                      source={place.img} 
+                      style={[selectedPlace === index ? bstyles.placeSelected : bstyles.place, {
+                        marginRight: index === places.length - 1 ? 20 : 0,
+                      }]} 
+                    />
+                    <Text style={{ fontFamily: selectedPlace === index ? 'mon-sb': '', paddingTop: 6}} >{place.title}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+          </>
         )}
       </View>
 
       {/* WHEN */}
       <View style={bstyles.card} >
         {openCard !== 1 && (
-          <AnimatedTouchableOpacity onPress={() => setOpenCard(1)} >
+          <AnimatedTouchableOpacity 
+            onPress={() => setOpenCard(1)}
+            style={bstyles.cardPreview}
+            entering={FadeIn.duration(200)} exiting={FadeOut.duration(200)}
+          >
             
             <Text style={[bstyles.previewText]} >When</Text>
             <Text style={[bstyles.previewdData]} >Any week</Text>
 
           </AnimatedTouchableOpacity>
         )}
+        {openCard === 1 && (
+          <Animated.View style={bstyles.cardBody} >
+            <Animated.Text entering={FadeIn} style={bstyles.cardHeader} >Who's coming?</Animated.Text>
+          </Animated.View>
+        )}
       </View>
 
       {/* WHEN */}
       <View style={bstyles.card} >
         {openCard !== 2 && (
-          <AnimatedTouchableOpacity onPress={() => setOpenCard(2)} >
+          <AnimatedTouchableOpacity
+            onPress={() => setOpenCard(2)}
+            style={bstyles.cardPreview}
+            entering={FadeIn.duration(200)} exiting={FadeOut.duration(200)}
+          >
             
             <Text style={[bstyles.previewText]} >Who</Text>
             <Text style={[bstyles.previewdData]} >Add guests</Text>
 
           </AnimatedTouchableOpacity>
+        )}
+        {openCard === 2 && (
+          <Animated.View style={bstyles.cardBody}>
+            <Animated.Text style={bstyles.cardHeader} >Add to?</Animated.Text>
+          </Animated.View>
         )}
       </View>
 
@@ -138,7 +188,6 @@ const bstyles = StyleSheet.create({
   },
   cardBody: {
     paddingHorizontal: 20,
-    paddingBottom: 20,
   },
   cardPreview: {
     flexDirection: 'row',
@@ -170,16 +219,16 @@ const bstyles = StyleSheet.create({
     gap: 25,
   },
   place: {
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
     borderRadius: 10,
   },
   placeSelected: {
     borderColor: Colors.grey,
     borderWidth: 2,
     borderRadius: 10,
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
   },
   previewText: {
     fontFamily: 'mon-sb',
