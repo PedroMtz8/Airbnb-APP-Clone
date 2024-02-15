@@ -62,7 +62,8 @@ const DetailsPage = () => {
       ),
       headerLeft: () => (
         <TouchableOpacity style={styles.roundButton} onPress={() =>{
-          if (navigation.canGoBack()) navigation.goBack();
+          if (navigation.canGoBack()) navigation.goBack() 
+          else null;
         }}>
           <Ionicons name="chevron-back" size={24} color={'#000'} />
         </TouchableOpacity>

@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { places } from '@/assets/data/places';
+import DatePicker from 'react-native-modern-datepicker';
 
 const guestsGropus = [
   {
@@ -35,9 +36,10 @@ const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpaci
 
 export default function Booking() {
   const router = useRouter();
-  const [openCard, setOpenCard] = React.useState(0);
-
+  const [openCard, setOpenCard] = React.useState(2);
+  const today = new Date().toISOString().substring(0, 10);
   const [selectedPlace, setSelectedPlace] = React.useState(0);
+  const [groups, setGroups] = React.useState(guestsGropus);
 
   const onClearAll = () => {
     setSelectedPlace(0);
@@ -105,9 +107,22 @@ export default function Booking() {
           </AnimatedTouchableOpacity>
         )}
         {openCard === 1 && (
-          <Animated.View style={bstyles.cardBody} >
-            <Animated.Text entering={FadeIn} style={bstyles.cardHeader} >Who's coming?</Animated.Text>
-          </Animated.View>
+          <>
+            <Animated.Text entering={FadeIn} style={bstyles.cardHeader} >When's your trip?</Animated.Text>
+            <Animated.View style={bstyles.cardBody} >
+              <DatePicker 
+                current={today}
+                selected={today}
+                mode="calendar"
+                options={{
+                  defaultFont: 'mon',
+                  headerFont: 'mon-sb',
+                  borderColor: 'transparent',
+                  mainColor: Colors.primary,
+                }} 
+              />
+            </Animated.View>
+          </>
         )}
       </View>
 
@@ -126,9 +141,53 @@ export default function Booking() {
           </AnimatedTouchableOpacity>
         )}
         {openCard === 2 && (
-          <Animated.View style={bstyles.cardBody}>
-            <Animated.Text style={bstyles.cardHeader} >Add to?</Animated.Text>
-          </Animated.View>
+          <>
+            <Animated.Text style={bstyles.cardHeader} >Who's coming?</Animated.Text>
+            <Animated.View style={bstyles.cardBody}>
+              {groups.map((group, index) => (
+                <View key={index} style={[bstyles.guestItem, index + 1 < guestsGropus.length ? bstyles.itemBorder : null  ]} >
+                  <View>
+                    <Text>{group.name}</Text>
+                    <Text>{group.text}</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', justifyContent: 'center' }} >
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (groups[index].count === 0) return;
+                        const newGroups = [...guestsGropus];
+                        newGroups[index].count--;
+                        setGroups(newGroups)
+                      }}
+                    >
+                      <Ionicons name='remove-circle-outline' size={26} color={ guestsGropus[index].count > 0 ? Colors.grey : '#cdcdcd' } />
+                    </TouchableOpacity>
+                    <Text style={{ fontFamily: 'mon', fontSize: 18, textAlign: 'center' }} >{group.count}</Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        const newGroups = [...guestsGropus];
+                        newGroups[index].count++;
+                        setGroups(newGroups)
+                      }}
+                    >
+                      <Ionicons name='add-circle-outline' size={26} color={Colors.grey} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                // <View key={index} style={[bstyles.guestItem, index !== 3 && bstyles.itemBorder]}>
+                //   <Text style={{ fontFamily: 'mon-sb', fontSize: 18 }} >{group.name}</Text>
+                //   <View style={{ flexDirection: 'row', gap: 20, alignItems: 'center' }} >
+                //     <TouchableOpacity>
+                //       <Ionicons name='remove-circle' size={24} color={Colors.dark} />
+                //     </TouchableOpacity>
+                //     <Text style={{ fontFamily: 'mon-sb', fontSize: 18 }} >{group.count}</Text>
+                //     <TouchableOpacity>
+                //       <Ionicons name='add-circle' size={24} color={Colors.dark} />
+                //     </TouchableOpacity>
+                //   </View>
+                // </View>
+              ))}
+            </Animated.View>
+          </>
         )}
       </View>
 
